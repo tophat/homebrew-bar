@@ -7,12 +7,15 @@ class YVM < Formula
 
   bottle :unneeded
 
-  depends_on 'node', 'unzip', 'curl'
+  depends_on 'node'
+  depends_on 'unzip'
+  depends_on 'curl'
 
-  conflicts_with 'hadoop', 'yarn', because: 'both install `yarn` binaries'
+  conflicts_with 'hadoop', because: 'both install `yarn` binaries'
+  conflicts_with 'yarn', because: 'both install `yarn` binaries'
 
   def install
-    system bin / 'curl -fsSL https://raw.githubusercontent.com/tophat/yvm/v2.4.1/scripts/install.sh | INSTALL_VERSION="v2.4.1" bash'
+    system 'make', 'install'
   end
 
   test do
