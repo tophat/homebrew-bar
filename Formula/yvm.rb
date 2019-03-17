@@ -1,5 +1,5 @@
 # yvm formula
-class YVM < Formula
+class Yvm < Formula
   desc 'Yarn Version Manager'
   homepage 'https://yvm.js.org'
   # Should only be updated if the new version is listed as a stable release
