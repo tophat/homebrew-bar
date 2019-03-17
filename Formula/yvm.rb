@@ -7,12 +7,12 @@ class Yvm < Formula
 
   bottle :unneeded
 
-  depends_on 'node'
-  depends_on 'unzip'
-  depends_on 'curl'
+  depends_on 'node' => :recommended
+  depends_on 'unzip' => :build
+  depends_on 'curl' => :build
 
   conflicts_with 'hadoop', because: 'both install `yarn` binaries'
-  conflicts_with 'yarn', because: 'both install `yarn` binaries'
+  conflicts_with 'yarn', because: 'yvm installs and manages yarn'
 
   def install
     system 'make', 'install'
