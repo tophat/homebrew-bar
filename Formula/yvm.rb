@@ -19,22 +19,21 @@ class Yvm < Formula
     inreplace 'yvm.fish', 'env YVM_INSTALL_DIR=$YVM_DIR curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.sh | bash', update_self_disabled
     chmod 755, 'yvm.sh'
     prefix.install Dir['*']
-    usr_home = `eval echo "~"`
+  end
+
+  def caveats
+    usr_home = `eval echo "~"`.strip
     yvm_home = usr_home+'/.yvm'
     system 'mkdir', '-p', yvm_home
     system 'ln', '-sf', prefix/'yvm.sh', yvm_home+'/yvm.sh'
     system 'ln', '-sf', prefix/'yvm.fish', yvm_home+'/yvm.fish'
-  end
-
-  def caveats
-    home = `eval echo "~"`
     s = <<~EOS
       To load yvm in the shell add to your ~/.bashrc or ~/.zsh
-      export YVM_DIR=#{home}/.yvm
+      export YVM_DIR=#{yvm_home}
       [ -r $YVM_DIR/yvm.sh ] && source $YVM_DIR/yvm.sh
 
       And for you fishers to your ~/.config/fish/config.fish
-      set -x YVM_DIR #{home}/.yvm
+      set -x YVM_DIR #{yvm_home}
       source . $YVM_DIR/yvm.fish
     EOS
     s
