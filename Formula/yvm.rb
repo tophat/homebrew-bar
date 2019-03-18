@@ -27,6 +27,7 @@ class Yvm < Formula
   end
 
   def caveats
+    home = `eval echo "~"`
     s = <<~EOS
       To load yvm in the shell add to your ~/.bashrc or ~/.zsh
       export YVM_DIR=#{home}/.yvm
