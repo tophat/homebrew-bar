@@ -14,7 +14,7 @@ class Yvm < Formula
   conflicts_with 'yarn', because: 'yvm installs and manages yarn'
 
   def install
-    update_self_disabled = 'echo "Yvm update-self disabled. Installed via homebrew."'
+    update_self_disabled = 'echo "YVM update-self disabled. Use `brew upgrade yvm`."'
     inreplace 'yvm.sh' do |s|
         s.gsub! 'YVM_DIR=${YVM_DIR-"${HOME}/.yvm"}', "YVM_DIR='#{prefix}'"
         s.gsub! 'curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.sh | YVM_INSTALL_DIR=${YVM_DIR} bash', update_self_disabled
@@ -24,6 +24,11 @@ class Yvm < Formula
         s.gsub! 'env YVM_INSTALL_DIR=$YVM_DIR curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.sh | bash', update_self_disabled
     end
     chmod 0755, 'yvm.sh'
+    makedirs '/usr/local/var/yvm/versions'
+    `ln -s /usr/local/var/yvm/versions ./versions`
+    open('.version', 'w') do |f|
+        f << "{ \"version\": \"#{version}\" }"
+    end
     prefix.install Dir['*']
   end
 
@@ -33,9 +38,13 @@ class Yvm < Formula
       export YVM_DIR='#{prefix}'
       [ -r $YVM_DIR/yvm.sh ] && source $YVM_DIR/yvm.sh
 
-      And for you fishers to your ~/.config/fish/config.fish
+      And for fishers, add to your ~/.config/fish/config.fish
       set -x YVM_DIR '#{prefix}'
       source . $YVM_DIR/yvm.fish
+
+      If you have previously installed YVM, link the versions folder
+      to allow all brewed YVM access to the managed yarn distributions
+      $ ln -sF ~/.yvm/versions /usr/local/var/yvm
     EOS
     emptor
   end
