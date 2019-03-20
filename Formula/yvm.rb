@@ -8,7 +8,7 @@ class Yvm < Formula
 
   bottle :unneeded
 
-  depends_on "node" => [:recommended, :optional] # Ignore if node already managed
+  depends_on "node" => [:recommended] # Can be ignored if node already managed
 
   conflicts_with "hadoop", :because => "both install `yarn` binaries"
   conflicts_with "yarn", :because => "yvm installs and manages yarn"
