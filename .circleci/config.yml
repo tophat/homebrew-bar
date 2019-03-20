@@ -10,17 +10,18 @@ commands:
     steps:
       - save_cache:
           name: Save image
-          key: homebrew-bar-{{ .Environment.CIRCLE_SHA1 }}
+          key: homebrew-bar-{{ .Environment.BUILD_CACHE }}
           paths:
+            - /home/linuxbrew/.bundle
+            - /home/linuxbrew/.cache
+            - /home/linuxbrew/.gem
             - /home/linuxbrew/.linuxbrew
-            - /usr/include
-            - /usr/share
   restore_env:
     description: "Restores enviroment cache"
     steps:
       - restore_cache:
           name: Restore image
-          key: homebrew-bar-{{ .Environment.CIRCLE_SHA1 }}
+          key: homebrew-bar-{{ .Environment.BUILD_CACHE }}
       - run: sudo chown linuxbrew /usr/local
       - run: rm -rf /home/linuxbrew/repo
       - checkout:
