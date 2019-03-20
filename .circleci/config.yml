@@ -12,13 +12,16 @@ commands:
           name: Save image
           key: homebrew-bar-{{ .Environment.CIRCLE_SHA1 }}
           paths:
-            - /
+            - /home/linuxbrew/.linuxbrew
+            - /usr/include
+            - /usr/share
   restore_env:
     description: "Restores enviroment cache"
     steps:
       - restore_cache:
           name: Restore image
           key: homebrew-bar-{{ .Environment.CIRCLE_SHA1 }}
+      - run: sudo chown linuxbrew /usr/local
       - run: rm -rf /home/linuxbrew/repo
       - checkout:
           path: /home/linuxbrew/repo
@@ -31,7 +34,6 @@ jobs:
       - restore_env
       - run: sudo apt-get update
       - run: sudo apt-get install build-essential zlibc zlib1g zlib1g-dev -y
-      - run: sudo chown linuxbrew /usr/local
       - run: brew install ruby
       - save_env
   audit:
