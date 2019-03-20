@@ -3,7 +3,7 @@ jobs:
   audit_and_test:
     docker:
       # - image: circleci/ruby:2.6.0-stretch
-      - image: linuxbrew/linuxbrew
+      - image: linuxbrew/linuxbrew:1.9.3
     steps:
       - checkout
       - run: sudo apt-get update
