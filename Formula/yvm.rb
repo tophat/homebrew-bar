@@ -26,10 +26,8 @@ class Yvm < Formula
     chmod 0755, 'yvm.sh'
     makedirs '/usr/local/var/yvm/versions'
     `ln -s /usr/local/var/yvm/versions ./versions`
-    open('.version', 'w') do |f|
-        f << "{ \"version\": \"#{version}\" }"
-    end
-    prefix.install Dir['*']
+    `echo '{ "version": "#{version}" }' > .version`
+    prefix.install ['.version', 'node_modules', 'yvm.sh', 'yvm.fish', 'yvm.js', 'yvm-exec.js']
   end
 
   def caveats
