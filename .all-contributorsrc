@@ -18,6 +18,15 @@
         "code",
         "ideas"
       ]
+    },
+    {
+      "login": "mcataford",
+      "name": "Marc Cataford",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6210361?v=4",
+      "profile": "https://marccataford.com",
+      "contributions": [
+        "doc"
+      ]
     }
   ],
   "contributorsPerLine": 7
