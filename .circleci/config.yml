@@ -1,0 +1,15 @@
+version: 2
+jobs:
+  audit_and_test:
+    docker:
+      - image: circleci/2.6.0-stretch
+    steps:
+      - checkout
+      - run: brew audit --new-formula Formula/*.rb
+      - run: brew audit --strict --online Formula/*.rb
+      - run: brew test Formula/*.rb
+workflows:
+  version: 2
+  audit_test:
+    jobs:
+      - audit_and_test
