@@ -1,0 +1,23 @@
+{
+  "projectName": "homebrew-bar",
+  "projectOwner": "tophat",
+  "repoType": "github",
+  "repoHost": "https://github.com",
+  "files": [
+    "README.md"
+  ],
+  "imageSize": 100,
+  "commit": false,
+  "contributors": [
+    {
+      "login": "mcataford",
+      "name": "Marc Cataford",
+      "avatar_url": "https://avatars2.githubusercontent.com/u/6210361?v=4",
+      "profile": "https://marccataford.com",
+      "contributions": [
+        "doc"
+      ]
+    }
+  ],
+  "contributorsPerLine": 7
+}
