@@ -3,10 +3,10 @@ jobs:
   audit_and_test:
     docker:
       # - image: circleci/ruby:2.6.0-stretch
-      - image: linuxbrew/debian
+      - image: linuxbrew/linuxbrew
     steps:
       - checkout
-      - run: apt-get install build-essential curl file git zlibc zlib1g zlib1g-dev
+      - run: sudo apt-get install build-essential curl file git zlibc zlib1g zlib1g-dev
       # - run: sudo adduser --disabled-password --gecos "" tapuser
       - run: 
           command: |
