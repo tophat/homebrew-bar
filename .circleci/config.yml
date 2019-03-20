@@ -6,7 +6,7 @@ jobs:
       - image: linuxbrew/debian
     steps:
       - checkout
-      # - run: sudo apt-get install build-essential curl file git
+      - run: apt-get install build-essential curl file git zlibc zlib1g zlib1g-dev
       # - run: sudo adduser --disabled-password --gecos "" tapuser
       - run: 
           command: |
