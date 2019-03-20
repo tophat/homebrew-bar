@@ -7,15 +7,17 @@ jobs:
       - checkout
       - run: sudo apt-get install build-essential curl file git
       - run: sudo adduser --disabled-password --gecos "" tapuser
-      - run: su - tapuser
-      - run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-      - run: test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-      - run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-      - run: test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
-      - run: echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
-      - run: brew audit --new-formula Formula/*.rb
-      - run: brew audit --strict --online Formula/*.rb
-      - run: brew test Formula/*.rb
+      - run: 
+          command: |
+            sudo login -f tapuser
+            sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+            test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+            test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+            echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+            brew audit --new-formula Formula/*.rb
+            brew audit --strict --online Formula/*.rb
+            brew test Formula/*.rb
 workflows:
   version: 2
   audit_test:
