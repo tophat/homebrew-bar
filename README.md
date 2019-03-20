@@ -7,7 +7,7 @@ brew tap tophat/bar
 ## Overview
 
 This is a [tap](https://docs.brew.sh/Taps) to all currently available
-[Top Hat Open Source](https://opensource.tophat.com) brews.
+[Top Hat Open Source](https://github.com/tophat) brews.
 
 ### Sommeliers
 
