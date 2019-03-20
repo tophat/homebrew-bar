@@ -3,6 +3,8 @@ version: 2.1
 docker_defaults: &docker_defaults
   docker:
     - image: linuxbrew/linuxbrew:1.9.3
+    environment:
+      HOMEBREW_NO_AUTO_UPDATE: 1
 
 commands:
   save_env:
@@ -36,7 +38,7 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install build-essential zlibc zlib1g zlib1g-dev -y
       - run: brew install ruby
-      - run: brew reinstall --force Formula/*.rb
+      - run: brew reinstall Formula/*.rb
       - save_env
   audit:
     <<: *docker_defaults
