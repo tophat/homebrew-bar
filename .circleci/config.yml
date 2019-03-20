@@ -1,25 +1,74 @@
 version: 2
-jobs:
-  audit_install_test:
-    docker:
-      - image: linuxbrew/linuxbrew:1.9.3
-    working_directory: /home/linuxbrew/repo
+
+docker_defaults: &docker_defaults
+  docker:
+    - image: linuxbrew/linuxbrew:1.9.3
+
+commands:
+  save_env:
+    description: "Saves environment cache"
     steps:
+      - save_cache:
+          key: homebrew-bar-{{ .Environment.CIRCLE_SHA1 }}
+          paths:
+            - /
+  restore_env:
+    description: "Restores enviroment cache"
+    steps:
+      - restore_cache:
+          key: homebrew-bar-{{ .Environment.CIRCLE_SHA1 }}
+      - run: rm -rf /home/linuxbrew/repo
       - checkout:
           path: /home/linuxbrew/repo
+
+jobs:
+  setup:
+    name: Start brewery
+    <<: *docker_defaults
+    working_directory: /
+    steps:
+      - restore_env
       - run: sudo apt-get update
       - run: sudo apt-get install build-essential zlibc zlib1g zlib1g-dev -y
       - run: sudo chown linuxbrew /usr/local
       - run: brew install ruby
+      - save_env
+  audit:
+    <<: *docker_defaults
+    name: Distill formulas
+    working_directory: /home/linuxbrew/repo
+    steps:
+      - restore_env
       - run:
           command: |
             brew audit --new-formula Formula/*.rb
             brew audit --strict --online Formula/*.rb
+  install:
+    <<: *docker_defaults
+    name: Pour formulas
+    working_directory: /home/linuxbrew/repo
+    steps:
+      - restore_env
       - run: brew install --force Formula/*.rb
+  test:
+    <<: *docker_defaults
+    name: Sip formulas
+    working_directory: /home/linuxbrew/repo
+    steps:
+      - restore_env
       - run: brew test Formula/*.rb
 
 workflows:
   version: 2
   audit_install_test:
     jobs:
-      - audit_install_test
+      - setup
+      - audit:
+          requires:
+            - setup
+      - install:
+          requires:
+            - setup
+      - test:
+          requires:
+            - install
