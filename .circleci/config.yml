@@ -3,6 +3,8 @@ jobs:
   audit_and_test:
     docker:
       - image: circleci/ruby:2.6.0-stretch
+    environment:
+      USER: tapuser
     steps:
       - checkout
       - run: sudo apt-get install build-essential curl file git
