@@ -5,9 +5,9 @@ jobs:
       - image: circleci/ruby:2.6.0-stretch
     steps:
       - checkout
-      - run: sudo adduser --disabled-password --gecos "" tapuser
-      - run: login tapuser
       - run: sudo apt-get install build-essential curl file git
+      - run: sudo adduser --disabled-password --gecos "" tapuser
+      - run: sudo login tapuser
       - run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
       - run: test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
       - run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
