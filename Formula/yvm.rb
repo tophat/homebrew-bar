@@ -48,6 +48,7 @@ class Yvm < Formula
   end
 
   test do
-    system 'bash -l -c "yvm --version"'
+    system "#{prefix}/yvm.sh ls"
+    system "#{prefix}/yvm.sh ls-remote"
   end
 end
