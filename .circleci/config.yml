@@ -10,7 +10,7 @@ commands:
     steps:
       - save_cache:
           name: Save image
-          key: homebrew-bar-{{ .Environment.BUILD_CACHE }}
+          key: homebrew-bar-buildcachekey123
           paths:
             - /home/linuxbrew/.bundle
             - /home/linuxbrew/.cache
