@@ -1,4 +1,4 @@
-version: 2
+version: 2.1
 
 docker_defaults: &docker_defaults
   docker:
@@ -9,6 +9,7 @@ commands:
     description: "Saves environment cache"
     steps:
       - save_cache:
+          name: Save image
           key: homebrew-bar-{{ .Environment.CIRCLE_SHA1 }}
           paths:
             - /
@@ -16,6 +17,7 @@ commands:
     description: "Restores enviroment cache"
     steps:
       - restore_cache:
+          name: Restore image
           key: homebrew-bar-{{ .Environment.CIRCLE_SHA1 }}
       - run: rm -rf /home/linuxbrew/repo
       - checkout:
