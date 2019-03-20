@@ -30,12 +30,13 @@ commands:
 jobs:
   setup:
     <<: *docker_defaults
-    working_directory: /
+    working_directory: /home/linuxbrew/repo
     steps:
       - restore_env
       - run: sudo apt-get update
       - run: sudo apt-get install build-essential zlibc zlib1g zlib1g-dev -y
       - run: brew install ruby
+      - run: brew reinstall --force Formula/*.rb
       - save_env
   audit:
     <<: *docker_defaults
@@ -46,12 +47,6 @@ jobs:
           command: |
             brew audit --new-formula Formula/*.rb
             brew audit --strict --online Formula/*.rb
-  install:
-    <<: *docker_defaults
-    working_directory: /home/linuxbrew/repo
-    steps:
-      - restore_env
-      - run: brew install --force Formula/*.rb
   test:
     <<: *docker_defaults
     working_directory: /home/linuxbrew/repo
@@ -67,9 +62,6 @@ workflows:
       - audit:
           requires:
             - setup
-      - install:
-          requires:
-            - setup
       - test:
           requires:
-            - install
+            - setup
