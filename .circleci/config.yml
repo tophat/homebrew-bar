@@ -9,7 +9,7 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install build-essential curl file git zlibc zlib1g zlib1g-dev ruby ruby-dev -y
       - run: sudo gem install rdiscount
-      - run: brew vendor-install ruby
+      - run: brew vendor-install ruby@2.0.0-p247
       # - run: sudo adduser --disabled-password --gecos "" tapuser
       - run: 
           command: |
