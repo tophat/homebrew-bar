@@ -7,7 +7,8 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update
-      - run: sudo apt-get install build-essential curl file git zlibc zlib1g zlib1g-dev ruby-dev -y
+      - run: sudo apt-get install build-essential curl file git zlibc zlib1g zlib1g-dev ruby ruby-dev -y
+      - run: sudo gem install rdiscount
       # - run: sudo adduser --disabled-password --gecos "" tapuser
       - run: 
           command: |
