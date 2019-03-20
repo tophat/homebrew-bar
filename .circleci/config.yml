@@ -25,7 +25,6 @@ commands:
 
 jobs:
   setup:
-    name: Start brewery
     <<: *docker_defaults
     working_directory: /
     steps:
@@ -37,7 +36,6 @@ jobs:
       - save_env
   audit:
     <<: *docker_defaults
-    name: Distill formulas
     working_directory: /home/linuxbrew/repo
     steps:
       - restore_env
@@ -47,14 +45,12 @@ jobs:
             brew audit --strict --online Formula/*.rb
   install:
     <<: *docker_defaults
-    name: Pour formulas
     working_directory: /home/linuxbrew/repo
     steps:
       - restore_env
       - run: brew install --force Formula/*.rb
   test:
     <<: *docker_defaults
-    name: Sip formulas
     working_directory: /home/linuxbrew/repo
     steps:
       - restore_env
