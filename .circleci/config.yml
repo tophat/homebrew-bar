@@ -5,6 +5,7 @@ jobs:
       - image: circleci/ruby:2.6.0-stretch
     steps:
       - checkout
+      - run: apt-get install build-essential curl file git
       - run: sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
       - run: test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
       - run: test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
