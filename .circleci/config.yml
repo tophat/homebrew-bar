@@ -3,8 +3,8 @@ version: 2.1
 docker_defaults: &docker_defaults
   docker:
     - image: linuxbrew/linuxbrew:1.9.3
-    environment:
-      HOMEBREW_NO_AUTO_UPDATE: 1
+      environment:
+        HOMEBREW_NO_AUTO_UPDATE: 1
 
 commands:
   save_env:
