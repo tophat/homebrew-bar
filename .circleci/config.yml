@@ -2,19 +2,20 @@ version: 2
 jobs:
   audit_and_test:
     docker:
-      - image: circleci/ruby:2.6.0-stretch
+      # - image: circleci/ruby:2.6.0-stretch
+      - image: linuxbrew/debian
     steps:
       - checkout
       - run: sudo apt-get install build-essential curl file git
-      - run: sudo adduser --disabled-password --gecos "" tapuser
+      # - run: sudo adduser --disabled-password --gecos "" tapuser
       - run: 
           command: |
-            sudo login -f tapuser
-            sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-            test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
-            test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-            test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
-            echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+            # sudo login -f tapuser
+            # sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+            # test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv)
+            # test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+            # test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile
+            # echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
             brew audit --new-formula Formula/*.rb
             brew audit --strict --online Formula/*.rb
             brew test Formula/*.rb
