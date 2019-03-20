@@ -48,7 +48,7 @@ class Yvm < Formula
   end
 
   test do
-    system "#{prefix}/yvm.sh ls"
-    system "#{prefix}/yvm.sh ls-remote"
+    system "#{prefix}/yvm.sh", "ls"
+    system "#{prefix}/yvm.sh", "ls-remote"
   end
 end
