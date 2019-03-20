@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  audit_install_test:
+    docker:
+      - image: linuxbrew/linuxbrew:1.9.3
+    working_directory: /home/linuxbrew/repo
+    steps:
+      - checkout:
+          path: /home/linuxbrew/repo
+      - run: sudo apt-get update
+      - run: sudo apt-get install build-essential zlibc zlib1g zlib1g-dev -y
+      - run: sudo chown linuxbrew /usr/local
+      - run: brew install ruby
+      - run:
+          command: |
+            brew audit --new-formula Formula/*.rb
+            brew audit --strict --online Formula/*.rb
+      - run: brew install --force Formula/*.rb
+      - run: brew test Formula/*.rb
+
+workflows:
+  version: 2
+  audit_install_test:
+    jobs:
+      - audit_install_test

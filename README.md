@@ -1,4 +1,6 @@
 # Top Hat Open Bar 🍺
+
+[![CircleCI](https://circleci.com/gh/tophat/homebrew-bar/tree/master.svg?style=svg)](https://circleci.com/gh/tophat/homebrew-bar/tree/master)
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors)
 
 ```sh
