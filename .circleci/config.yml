@@ -52,7 +52,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - restore_env
-      - run: brew install --force Formula/*.rb
+      - run: brew reinstall Formula/*.rb
       - persist_to_workspace:
           root: ~/
           paths:
