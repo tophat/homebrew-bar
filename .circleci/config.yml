@@ -25,7 +25,6 @@ commands:
           name: Restore image
           key: homebrew-bar-{{ .Environment.BUILD_CACHE_KEY }}
       - run: sudo chown linuxbrew /usr/local
-      - run: rm -rf ~/repo
       - checkout:
           path: ~/repo
 
@@ -53,18 +52,18 @@ jobs:
     working_directory: ~/repo
     steps:
       - restore_env
-      - run: brew reinstall Formula/*.rb
+      - run: brew install --force Formula/*.rb
       - persist_to_workspace:
           root: ~
           paths:
-            - .linuxbrew
+            - .linuxbrew/
   test:
     <<: *docker_defaults
     working_directory: ~/repo
     steps:
       - restore_env
       - attach_workspace:
-          at: ~/.linuxbrew
+          at: ~
       - run: brew test Formula/*.rb
 
 workflows:
