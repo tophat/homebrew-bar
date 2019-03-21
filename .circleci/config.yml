@@ -37,6 +37,7 @@ jobs:
       - run: sudo apt-get update
       - run: sudo apt-get install build-essential zlibc zlib1g zlib1g-dev -y
       - run: brew install ruby
+      - run: brew install --only-dependencies Formula/*.rb
       - save_env
   audit:
     <<: *docker_defaults
@@ -52,7 +53,7 @@ jobs:
     working_directory: ~/repo
     steps:
       - restore_env
-      - run: brew reinstall Formula/*.rb
+      - run: brew install --force Formula/*.rb
       - persist_to_workspace:
           root: ~/
           paths:
