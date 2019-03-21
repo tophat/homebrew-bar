@@ -12,48 +12,59 @@ commands:
     steps:
       - save_cache:
           name: Save image
-          key: homebrew-bar-buildcachekey123
+          key: homebrew-bar-{{ .Environment.BUILD_CACHE_KEY }}
           paths:
-            - /home/linuxbrew/.bundle
-            - /home/linuxbrew/.cache
-            - /home/linuxbrew/.gem
-            - /home/linuxbrew/.linuxbrew
+            - ~/.bundle
+            - ~/.cache
+            - ~/.gem
+            - ~/.linuxbrew
   restore_env:
     description: "Restores enviroment cache"
     steps:
       - restore_cache:
           name: Restore image
-          key: homebrew-bar-{{ .Environment.BUILD_CACHE }}
+          key: homebrew-bar-{{ .Environment.BUILD_CACHE_KEY }}
       - run: sudo chown linuxbrew /usr/local
-      - run: rm -rf /home/linuxbrew/repo
+      - run: rm -rf ~/repo
       - checkout:
-          path: /home/linuxbrew/repo
+          path: ~/repo
 
 jobs:
   setup:
     <<: *docker_defaults
-    working_directory: /home/linuxbrew/repo
+    working_directory: ~/repo
     steps:
       - restore_env
       - run: sudo apt-get update
       - run: sudo apt-get install build-essential zlibc zlib1g zlib1g-dev -y
       - run: brew install ruby
-      - run: brew reinstall Formula/*.rb
       - save_env
   audit:
     <<: *docker_defaults
-    working_directory: /home/linuxbrew/repo
+    working_directory: ~/repo
     steps:
       - restore_env
       - run:
           command: |
             brew audit --new-formula Formula/*.rb
             brew audit --strict --online Formula/*.rb
-  test:
+  install:
     <<: *docker_defaults
-    working_directory: /home/linuxbrew/repo
+    working_directory: ~/repo
     steps:
       - restore_env
+      - run: brew reinstall Formula/*.rb
+      - persist_to_workspace:
+          root: ~
+          paths:
+            - .linuxbrew
+  test:
+    <<: *docker_defaults
+    working_directory: ~/repo
+    steps:
+      - restore_env
+      - attach_workspace:
+          at: ~/.linuxbrew
       - run: brew test Formula/*.rb
 
 workflows:
@@ -64,6 +75,9 @@ workflows:
       - audit:
           requires:
             - setup
-      - test:
+      - install:
           requires:
             - setup
+      - test:
+          requires:
+            - install
