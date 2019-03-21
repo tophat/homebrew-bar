@@ -1,25 +1,82 @@
-version: 2
-jobs:
-  audit_install_test:
-    docker:
-      - image: linuxbrew/linuxbrew:1.9.3
-    working_directory: /home/linuxbrew/repo
+version: 2.1
+
+docker_defaults: &docker_defaults
+  docker:
+    - image: linuxbrew/linuxbrew:1.9.3
+      environment:
+        HOMEBREW_NO_AUTO_UPDATE: 1
+
+commands:
+  save_env:
+    description: "Saves environment cache"
     steps:
+      - save_cache:
+          name: Save image
+          key: homebrew-bar-{{ .Environment.BUILD_CACHE_KEY }}
+          paths:
+            - ~/.bundle
+            - ~/.cache
+            - ~/.gem
+            - ~/.linuxbrew
+  restore_env:
+    description: "Restores enviroment cache"
+    steps:
+      - restore_cache:
+          name: Restore image
+          key: homebrew-bar-{{ .Environment.BUILD_CACHE_KEY }}
+      - run: sudo chown linuxbrew /usr/local
       - checkout:
-          path: /home/linuxbrew/repo
+          path: ~/repo
+
+jobs:
+  setup:
+    <<: *docker_defaults
+    working_directory: ~/repo
+    steps:
+      - restore_env
       - run: sudo apt-get update
       - run: sudo apt-get install build-essential zlibc zlib1g zlib1g-dev -y
-      - run: sudo chown linuxbrew /usr/local
       - run: brew install ruby
+      - save_env
+  audit:
+    <<: *docker_defaults
+    working_directory: ~/repo
+    steps:
+      - restore_env
       - run:
           command: |
             brew audit --new-formula Formula/*.rb
             brew audit --strict --online Formula/*.rb
-      - run: brew install --force Formula/*.rb
+  install:
+    <<: *docker_defaults
+    working_directory: ~/repo
+    steps:
+      - restore_env
+      - run: brew reinstall Formula/*.rb
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - .linuxbrew/
+  test:
+    <<: *docker_defaults
+    working_directory: ~/repo
+    steps:
+      - restore_env
+      - attach_workspace:
+          at: ~/
       - run: brew test Formula/*.rb
 
 workflows:
   version: 2
   audit_install_test:
     jobs:
-      - audit_install_test
+      - setup
+      - audit:
+          requires:
+            - setup
+      - install:
+          requires:
+            - setup
+      - test:
+          requires:
+            - install
