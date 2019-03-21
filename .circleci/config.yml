@@ -54,7 +54,7 @@ jobs:
       - restore_env
       - run: brew install --force Formula/*.rb
       - persist_to_workspace:
-          root: ~
+          root: ~/
           paths:
             - .linuxbrew/
   test:
@@ -63,7 +63,7 @@ jobs:
     steps:
       - restore_env
       - attach_workspace:
-          at: ~
+          at: ~/
       - run: brew test Formula/*.rb
 
 workflows:
