@@ -3,8 +3,8 @@ class Yvm < Formula
   desc "Manage multiple versions of Yarn"
   homepage "https://yvm.js.org"
   # Should only be updated if a newer version is listed as a stable release
-  url "https://github.com/tophat/yvm/releases/download/v2.4.1/yvm.zip"
-  sha256 "82e0e3ee1e66ad389641fef9d9c3a164124cd63e89323a77e03a30fa9d5ecfdf"
+  url "https://github.com/tophat/yvm/releases/download/v3.#.#/yvm.zip"
+  sha256 "###"
 
   bottle :unneeded
 
@@ -32,13 +32,8 @@ class Yvm < Formula
 
   def caveats
     emptor = <<~EOS
-      To load yvm in the shell add to your ~/.bashrc or ~/.zsh
-      export YVM_DIR="#{prefix}"
-      [ -r $YVM_DIR/yvm.sh ] && source $YVM_DIR/yvm.sh
-
-      And for fishers, add to your ~/.config/fish/config.fish
-      set -x YVM_DIR "#{prefix}"
-      source . $YVM_DIR/yvm.fish
+      Run the following command to configure your shell rc file
+      $ node "#{prefix}/yvm.js" configure-shell
 
       If you have previously installed YVM, link the versions folder
       to allow all brewed YVM access to the managed yarn distributions
