@@ -3,8 +3,8 @@ class Yvm < Formula
   desc "Manage multiple versions of Yarn"
   homepage "https://yvm.js.org"
   # Should only be updated if a newer version is listed as a stable release
-  url "https://github.com/tophat/yvm/releases/download/v3.1.0/yvm.zip"
-  sha256 "c6131dc8d4be12706e66110e378da35978d1171e5b166904d827e3cf8fc678a8"
+  url "https://github.com/tophat/yvm/releases/download/v3.2.1/yvm.zip"
+  sha256 "284961f725308ee284ebbfc100cacd54631396e6278aa5b6071a64ab291180ef"
 
   bottle :unneeded
 
@@ -24,16 +24,17 @@ class Yvm < Formula
       s.gsub! "env YVM_INSTALL_DIR=$YVM_DIR curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.js | node", update_self_disabled
     end
     chmod 0755, "yvm.sh"
+    chmod 0755, "shim/yarn"
     makedirs "/usr/local/var/yvm/versions"
     ln_s "/usr/local/var/yvm/versions", "./versions"
     File.write(".version", "{ \"version\": \"#{version}\" }")
-    prefix.install [".version", "versions", "node_modules", "yvm.sh", "yvm.fish", "yvm.js"]
+    prefix.install [".version", "versions", "node_modules", "shim", "yvm.sh", "yvm.fish", "yvm.js"]
   end
 
   def caveats
     emptor = <<~EOS
       Run the following command to configure your shell rc file
-      $ node "#{prefix}/yvm.js" configure-shell
+      $ YVM_INSTALL_DIR="#{prefix}" node "#{prefix}/yvm.js" configure-shell
 
       If you have previously installed YVM, link the versions folder
       to allow all brewed YVM access to the managed yarn distributions
@@ -45,5 +46,6 @@ class Yvm < Formula
   test do
     system "#{prefix}/yvm.sh", "ls"
     system "#{prefix}/yvm.sh", "ls-remote"
+    system "#{prefix}/shim/yarn", "--version"
   end
 end
