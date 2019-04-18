@@ -46,7 +46,7 @@ class Yvm < Formula
   test do
     system "#{prefix}/yvm.sh", "ls"
     system "#{prefix}/yvm.sh", "ls-remote"
-    touch "#{HOME}/.bashrc"
+    File.write("#{ENV.HOME}/.bashrc", "")
     system "#{prefix}/yvm.sh", "configure-shell"
     system "#{prefix}/shim/yarn", "--version"
   end
