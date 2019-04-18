@@ -48,16 +48,6 @@ jobs:
           command: |
             brew audit --new-formula Formula/*.rb
             brew audit --strict --online Formula/*.rb
-  install:
-    <<: *docker_defaults
-    working_directory: ~/repo
-    steps:
-      - restore_env
-      - run: brew install --force Formula/*.rb
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - .linuxbrew/
   test:
     <<: *docker_defaults
     working_directory: ~/repo
@@ -65,6 +55,7 @@ jobs:
       - restore_env
       - attach_workspace:
           at: ~/
+      - run: brew install --force Formula/*.rb
       - run: brew test Formula/*.rb
 
 workflows:
@@ -75,9 +66,6 @@ workflows:
       - audit:
           requires:
             - setup
-      - install:
-          requires:
-            - setup
       - test:
           requires:
-            - install
+            - setup
