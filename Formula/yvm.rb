@@ -25,7 +25,7 @@ class Yvm < Formula
     end
     chmod 0755, "yvm.sh"
     chmod 0755, "shim/yarn"
-    makedirs "/usr/local/var/yvm/versions"
+    FileUtils.mkdir_p "/usr/local/var/yvm/versions"
     ln_s "/usr/local/var/yvm/versions", "./versions"
     File.write(".version", "{ \"version\": \"#{version}\" }")
     prefix.install [".version", "versions", "node_modules", "shim", "yvm.sh", "yvm.fish", "yvm.js"]
