@@ -44,10 +44,13 @@ class Yvm < Formula
   end
 
   test do
-    system "#{prefix}/yvm.sh", "ls"
-    system "#{prefix}/yvm.sh", "ls-remote"
-    File.write("#{ENV.HOME}/.bashrc", "")
+    File.write("#{ENV['HOME']}/.bashrc", "")
+    ENV['YVM_INSTALL_DIR'] = "#{prefix}"
     system "#{prefix}/yvm.sh", "configure-shell"
+    system "bash -i -c 'echo $YVM_DIR'"
+    system "bash -i -c 'yvm ls-remote'"
+    ENV['YVM_DIR'] = "#{prefix}"
     system "#{prefix}/shim/yarn", "--version"
+    system "bash -i -c 'yvm ls'"
   end
 end
