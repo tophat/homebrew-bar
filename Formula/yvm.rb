@@ -25,7 +25,7 @@ class Yvm < Formula
     end
     chmod 0755, "yvm.sh"
     chmod 0755, "shim/yarn"
-    FileUtils.mkdir_p "/usr/local/var/yvm/versions"
+    mkdir_p "/usr/local/var/yvm/versions"
     ln_s "/usr/local/var/yvm/versions", "./versions"
     File.write(".version", "{ \"version\": \"#{version}\" }")
     prefix.install [".version", "versions", "node_modules", "shim", "yvm.sh", "yvm.fish", "yvm.js"]
@@ -46,6 +46,7 @@ class Yvm < Formula
   test do
     system "#{prefix}/yvm.sh", "ls"
     system "#{prefix}/yvm.sh", "ls-remote"
+    system "#{prefix}/yvm.sh", "configure-shell"
     system "#{prefix}/shim/yarn", "--version"
   end
 end
