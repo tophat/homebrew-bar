@@ -3,8 +3,8 @@ class Yvm < Formula
   desc "Manage multiple versions of Yarn"
   homepage "https://yvm.js.org"
   # Should only be updated if a newer version is listed as a stable release
-  url "https://github.com/tophat/yvm/releases/download/v3.2.2/yvm.zip"
-  sha256 "ae3db7c910f44481704a6b7f9bfba2ddd110417a3e27034a509150e38d051b2a"
+  url "https://github.com/tophat/yvm/releases/download/v3.2.3/yvm.zip"
+  sha256 "de393b193e4acbbb4c720e1a6c0eaf40693df9689caccb47414015251aa1f65b"
 
   bottle :unneeded
 
@@ -20,7 +20,7 @@ class Yvm < Formula
       s.gsub! "curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.js | YVM_INSTALL_DIR=${YVM_DIR} node", update_self_disabled
     end
     inreplace "yvm.fish" do |s|
-      s.gsub! 'set -q YVM_DIR; or set -U YVM_DIR "$HOME/.yvm"', "set -U YVM_DIR '#{prefix}'"
+      s.gsub! 'set -q YVM_DIR; or set -gx YVM_DIR "$HOME/.yvm"', "set -gx YVM_DIR '#{prefix}'"
       s.gsub! "env YVM_INSTALL_DIR=$YVM_DIR curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.js | node", update_self_disabled
     end
     chmod 0755, "yvm.sh"
@@ -28,7 +28,7 @@ class Yvm < Formula
     mkdir_p "/usr/local/var/yvm/versions"
     ln_sf "/usr/local/var/yvm/versions", "./versions"
     File.write(".version", "{ \"version\": \"#{version}\" }")
-    prefix.install [".version", "versions", "node_modules", "shim", "yvm.sh", "yvm.fish", "yvm.js"]
+    prefix.install [".version", "versions", "shim", "yvm.sh", "yvm.fish", "yvm.js"]
   end
 
   def caveats
