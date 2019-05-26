@@ -18,7 +18,7 @@ class Yvm < Formula
     mkdir_p "#{ENV["HOME"]}/.config/fish"
     File.write("#{ENV["HOME"]}/.config/fish/config.fish", "")
     ENV["YVM_INSTALL_DIR"] = "."
-    system "node yvm.js configure-shell"
+    system "node", "yvm.js", "configure-shell"
     update_self_disabled = "echo 'YVM update-self disabled. Use `brew upgrade yvm`.'"
     inreplace "yvm.sh" do |s|
       s.gsub! 'YVM_DIR=${YVM_DIR-"${HOME}/.yvm"}', "YVM_DIR='#{prefix}'"
