@@ -3,8 +3,8 @@ class Yvm < Formula
   desc "Manage multiple versions of Yarn"
   homepage "https://yvm.js.org"
   # Should only be updated if a newer version is listed as a stable release
-  url "https://github.com/tophat/yvm/releases/download/v3.5.0/yvm.js"
-  sha256 "ce92a2434991c273f003aa3e64d97c353b122d64269e33aabe73fb17f713c423"
+  url "https://github.com/tophat/yvm/releases/download/v3.6.0/yvm.js"
+  sha256 "d33f574222eebcd2698195923c64b33714b4cb4acc959ca8e195b9e5e72abbba"
 
   bottle :unneeded
 
@@ -17,8 +17,7 @@ class Yvm < Formula
     File.write("#{ENV["HOME"]}/.bashrc", "")
     mkdir_p "#{ENV["HOME"]}/.config/fish"
     File.write("#{ENV["HOME"]}/.config/fish/config.fish", "")
-    ENV["YVM_INSTALL_DIR"] = "."
-    system "node", "yvm.js", "configure-shell"
+    system "node", "yvm.js", "configure-shell", "--yvmDir", "."
     update_self_disabled = "echo 'YVM update-self disabled. Use `brew upgrade yvm`.'"
     inreplace "yvm.sh" do |s|
       s.gsub! 'YVM_DIR=${YVM_DIR-"${HOME}/.yvm"}', "YVM_DIR='#{prefix}'"
@@ -37,7 +36,7 @@ class Yvm < Formula
   def caveats
     emptor = <<~EOS
       Run the following command to configure your shell rc file
-      $ YVM_INSTALL_DIR="#{prefix}" node "#{prefix}/yvm.js" configure-shell
+      $ node "#{prefix}/yvm.js" configure-shell --yvmDir "#{prefix}"
 
       If you have previously installed YVM, link the versions folder
       to allow all brewed YVM access to the managed yarn distributions
@@ -48,8 +47,7 @@ class Yvm < Formula
 
   test do
     File.write("#{ENV["HOME"]}/.bashrc", "")
-    ENV["YVM_INSTALL_DIR"] = prefix.to_s
-    system "node", "#{prefix}/yvm.js", "configure-shell"
+    system "node", "#{prefix}/yvm.js", "configure-shell", "--yvmDir", prefix.to_s
     system "bash -i -c 'echo $YVM_DIR'"
     system "bash -i -c 'yvm ls-remote'"
     ENV["YVM_DIR"] = prefix.to_s
