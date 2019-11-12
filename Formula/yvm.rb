@@ -3,8 +3,8 @@ class Yvm < Formula
   desc "Manage multiple versions of Yarn"
   homepage "https://yvm.js.org"
   # Should only be updated if a newer version is listed as a stable release
-  url "https://github.com/tophat/yvm/releases/download/v3.6.1/yvm.js"
-  sha256 "a34fb1c0f43a7678f0ff96c2d71a08f5786bc47d1fc3d9386a2df82b1687aade"
+  url "https://github.com/tophat/yvm/releases/download/v3.6.4/yvm.js"
+  sha256 "b893665efc85b71d6e6e0ed6f815c334eb5b4dff03cc1c72596525fa88a19998"
 
   bottle :unneeded
 
