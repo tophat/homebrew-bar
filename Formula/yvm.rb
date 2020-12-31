@@ -29,8 +29,9 @@ class Yvm < Formula
       s.gsub! "env YVM_INSTALL_DIR=$YVM_DIR curl -fsSL https://raw.githubusercontent.com/tophat/yvm"\
               "/master/scripts/install.js | node", update_self_disabled
     end
-    mkdir_p "#{prefix}/../versions"
-    ln_sf "#{prefix}/../versions", "./versions"
+    yarn_versions_dir = "#{ENV["HOME"]}/.yvm/versions"
+    mkdir_p yarn_versions_dir
+    ln_sf yarn_versions_dir, "./versions"
     File.write(".version", "{ \"version\": \"#{version}\" }")
     prefix.install [".version", "versions", "shim", "yvm.sh", "yvm.fish", "yvm.js"]
   end
@@ -39,10 +40,6 @@ class Yvm < Formula
     <<~EOS
       Run the following command to configure your shell rc file
       $ node "#{prefix}/yvm.js" configure-shell --yvmDir "#{prefix}"
-
-      If you have previously installed YVM, link the versions folder
-      to allow all brewed YVM access to the managed yarn distributions
-      $ ln -sF ~/.yvm/versions #{opt_prefix}
     EOS
   end
 
@@ -51,6 +48,7 @@ class Yvm < Formula
     system "node", "#{prefix}/yvm.js", "configure-shell", "--yvmDir", prefix.to_s
     assert_match prefix.to_s, shell_output("bash -i -c 'echo $YVM_DIR'").strip
     shell_output("bash -i -c 'yvm ls-remote'")
+    File.write("./.yvmrc", "1.22.5")
     assert_match "1.22.5", shell_output("bash -i -c '#{prefix}/shim/yarn --version'").strip
     shell_output("bash -i -c 'yvm ls'")
   end
