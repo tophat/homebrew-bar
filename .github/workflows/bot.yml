@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: hmarr/auto-approve-action@v2.0.0
       with:
-        github-token: "${{ secrets.GH_TOKEN }}"
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
   merge:
     runs-on: ubuntu-latest
     if: github.actor == 'tophat-opensource-bot'
