@@ -22,6 +22,7 @@ jobs:
         MERGE_FILTER_AUTHOR: "tophat-opensource-bot"
         MERGE_LABELS: ""
         MERGE_METHOD: "squash"
+        MERGE_RETRY_SLEEP: 120000
         UPDATE_LABELS: ""
         UPDATE_METHOD: "rebase"
         UPDATE_RETRY_SLEEP: 120000
