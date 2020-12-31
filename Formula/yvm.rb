@@ -42,17 +42,16 @@ class Yvm < Formula
 
       If you have previously installed YVM, link the versions folder
       to allow all brewed YVM access to the managed yarn distributions
-      $ ln -sF ~/.yvm/versions /usr/local/var/yvm
+      $ ln -sF ~/.yvm/versions #{opt_prefix}
     EOS
   end
 
   test do
     File.write("#{ENV["HOME"]}/.bashrc", "")
     system "node", "#{prefix}/yvm.js", "configure-shell", "--yvmDir", prefix.to_s
-    system "bash", "-i", "-c", "'echo $YVM_DIR'"
-    system "bash", "-i", "-c", "'yvm ls-remote'"
-    ENV["YVM_DIR"] = prefix.to_s
-    system "#{prefix}/shim/yarn", "--version"
-    system "bash", "-i", "-c", "'yvm ls'"
+    assert_match prefix.to_s, shell_output("bash -i -c 'echo $YVM_DIR'").strip
+    shell_output("bash -i -c 'yvm ls-remote'")
+    assert_match "1.22.5", shell_output("bash -i -c '#{prefix}/shim/yarn --version'").strip
+    shell_output("bash -i -c 'yvm ls'")
   end
 end
