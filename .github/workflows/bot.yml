@@ -1,0 +1,24 @@
+name: Autobot
+on:
+  pull_request:
+  check_suite:
+    types:
+      - completed
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    if: github.actor == 'tophat-opensource-bot'
+    steps:
+    - uses: hmarr/auto-approve-action@v2.0.0
+      with:
+        github-token: "${{ secrets.GH_TOKEN }}"
+  merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'tophat-opensource-bot'
+    steps:
+    - uses: "pascalgn/automerge-action@v0.13.0"
+      env:
+        GITHUB_TOKEN: "${{ secrets.GH_TOKEN }}"
+        MERGE_FILTER_AUTHOR: "tophat-opensource-bot"
+        MERGE_LABELS: ""
+        MERGE_METHOD: "squash"
