@@ -10,8 +10,8 @@ class Yvm < Formula
 
   depends_on "node" => [:recommended] # Can be ignored if node is already managed
 
-  conflicts_with "hadoop", :because => "both install `yarn` binaries"
-  conflicts_with "yarn", :because => "yvm installs and manages yarn"
+  conflicts_with "hadoop", because: "both install `yarn` binaries"
+  conflicts_with "yarn", because: "yvm installs and manages yarn"
 
   def install
     File.write("#{ENV["HOME"]}/.bashrc", "")
@@ -21,37 +21,35 @@ class Yvm < Formula
     update_self_disabled = "echo 'YVM update-self disabled. Use `brew upgrade yvm`.'"
     inreplace "yvm.sh" do |s|
       s.gsub! 'YVM_DIR=${YVM_DIR-"${HOME}/.yvm"}', "YVM_DIR='#{prefix}'"
-      s.gsub! "curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.js | YVM_INSTALL_DIR=${YVM_DIR} node", update_self_disabled
+      s.gsub! "curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.js"\
+              " | YVM_INSTALL_DIR=${YVM_DIR} node", update_self_disabled
     end
     inreplace "yvm.fish" do |s|
       s.gsub! 'set -q YVM_DIR; or set -gx YVM_DIR "$HOME/.yvm"', "set -gx YVM_DIR '#{prefix}'"
-      s.gsub! "env YVM_INSTALL_DIR=$YVM_DIR curl -fsSL https://raw.githubusercontent.com/tophat/yvm/master/scripts/install.js | node", update_self_disabled
+      s.gsub! "env YVM_INSTALL_DIR=$YVM_DIR curl -fsSL https://raw.githubusercontent.com/tophat/yvm"\
+              "/master/scripts/install.js | node", update_self_disabled
     end
-    mkdir_p "/usr/local/var/yvm/versions"
-    ln_sf "/usr/local/var/yvm/versions", "./versions"
+    yarn_versions_dir = "#{ENV["HOME"]}/.yvm/versions"
+    mkdir_p yarn_versions_dir
+    ln_sf yarn_versions_dir, "./versions"
     File.write(".version", "{ \"version\": \"#{version}\" }")
     prefix.install [".version", "versions", "shim", "yvm.sh", "yvm.fish", "yvm.js"]
   end
 
   def caveats
-    emptor = <<~EOS
+    <<~EOS
       Run the following command to configure your shell rc file
       $ node "#{prefix}/yvm.js" configure-shell --yvmDir "#{prefix}"
-
-      If you have previously installed YVM, link the versions folder
-      to allow all brewed YVM access to the managed yarn distributions
-      $ ln -sF ~/.yvm/versions /usr/local/var/yvm
     EOS
-    emptor
   end
 
   test do
     File.write("#{ENV["HOME"]}/.bashrc", "")
     system "node", "#{prefix}/yvm.js", "configure-shell", "--yvmDir", prefix.to_s
-    system "bash -i -c 'echo $YVM_DIR'"
-    system "bash -i -c 'yvm ls-remote'"
-    ENV["YVM_DIR"] = prefix.to_s
-    system "#{prefix}/shim/yarn", "--version"
-    system "bash -i -c 'yvm ls'"
+    assert_match prefix.to_s, shell_output("bash -i -c 'echo $YVM_DIR'").strip
+    shell_output("bash -i -c 'yvm ls-remote'")
+    File.write("./.yvmrc", "1.22.5")
+    assert_match "1.22.5", shell_output("bash -i -c '#{prefix}/shim/yarn --version'").strip
+    shell_output("bash -i -c 'yvm ls'")
   end
 end

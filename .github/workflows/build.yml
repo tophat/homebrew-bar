@@ -1,0 +1,16 @@
+name: Build
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+    - name: Audit
+      run: |
+        brew audit --new-formula Formula/*.rb
+        brew audit --strict --online Formula/*.rb
+    - name: Test
+      run: |
+        brew install --force Formula/*.rb
+        brew test Formula/*.rb
