@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: "pascalgn/automerge-action@v0.13.0"
       env:
-        GITHUB_TOKEN: "${{ secrets.GH_TOKEN }}"
+        GITHUB_TOKEN: "${{ secrets.TOPHAT_BOT_GH_TOKEN }}"
         MERGE_FILTER_AUTHOR: "tophat-opensource-bot"
         MERGE_LABELS: ""
         MERGE_METHOD: "squash"
