@@ -14,9 +14,9 @@ class Yvm < Formula
   conflicts_with "yarn", because: "yvm installs and manages yarn"
 
   def install
-    File.write("#{ENV["HOME"]}/.bashrc", "")
-    mkdir_p "#{ENV["HOME"]}/.config/fish"
-    File.write("#{ENV["HOME"]}/.config/fish/config.fish", "")
+    File.write("#{ENV['HOME']}/.bashrc", "")
+    mkdir_p "#{ENV['HOME']}/.config/fish"
+    File.write("#{ENV['HOME']}/.config/fish/config.fish", "")
     system "node", "yvm.js", "configure-shell", "--yvmDir", "."
     update_self_disabled = "echo 'YVM update-self disabled. Use `brew upgrade yvm`.'"
     inreplace "yvm.sh" do |s|
@@ -29,7 +29,7 @@ class Yvm < Formula
       s.gsub! "env YVM_INSTALL_DIR=$YVM_DIR curl -fsSL https://raw.githubusercontent.com/tophat/yvm"\
               "/master/scripts/install.js | node", update_self_disabled
     end
-    yarn_versions_dir = "#{ENV["HOME"]}/.yvm/versions"
+    yarn_versions_dir = "#{ENV['HOME']}/.yvm/versions"
     mkdir_p yarn_versions_dir
     ln_sf yarn_versions_dir, "./versions"
     File.write(".version", "{ \"version\": \"#{version}\" }")
@@ -37,14 +37,14 @@ class Yvm < Formula
   end
 
   def caveats
-    <<~EOS
+    <<~POSTINSTALLCONFIG
       Run the following command to configure your shell rc file
       $ node "#{prefix}/yvm.js" configure-shell --yvmDir "#{prefix}"
-    EOS
+    POSTINSTALLCONFIG
   end
 
   test do
-    File.write("#{ENV["HOME"]}/.bashrc", "")
+    File.write("#{ENV['HOME']}/.bashrc", "")
     system "node", "#{prefix}/yvm.js", "configure-shell", "--yvmDir", prefix.to_s
     assert_match prefix.to_s, shell_output("bash -i -c 'echo $YVM_DIR'").strip
     shell_output("bash -i -c 'yvm ls-remote'")
