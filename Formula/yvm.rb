@@ -6,8 +6,6 @@ class Yvm < Formula
   url "https://github.com/tophat/yvm/releases/download/v4.1.4/yvm.js"
   sha256 "27b255daff1b9baebddbcd122bacafb155079a188138fbaa0a23d9d309f6c1c0"
 
-  bottle :unneeded
-
   depends_on "node" => [:recommended] # Can be ignored if node is already managed
 
   conflicts_with "hadoop", because: "both install `yarn` binaries"
